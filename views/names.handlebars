@@ -1,0 +1,14 @@
+<h1>Greeted Name</h1>
+<div class='row'>
+    <p>The following are the names of greeted people</p>
+    <table>
+        <tr>
+            <th>Names</th>
+        </tr>
+        {{#each greeted}}
+        <tr>
+            <td><a href='/counter/{{key}}'>{{key}}</a></td>
+        </tr>
+        {{/each}}
+    </table>
+</div>

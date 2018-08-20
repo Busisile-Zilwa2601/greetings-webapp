@@ -23,8 +23,9 @@ app.use(bodyParser.json());
 
 //routes
 app.get('/', myRoutes.index);
-
 app.get('/greetings', myRoutes.getGreetings);
+app.post('/greeted', myRoutes.getNames);
+app.get('/counter/:name', myRoutes.getCounts);
 
 //add the PORT
 let PORT = process.env.PORT || 3077;

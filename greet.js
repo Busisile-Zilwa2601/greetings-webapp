@@ -1,49 +1,66 @@
 module.exports = function greet() {
   var temp = {};
   var counter = 0;
+  var message;
+  var listNames = [];
   var nameEntry = function (name) {
-    if (name != '' && Number.isNaN(Number(name))) {
+    if (name != '' && nameValidate(name)) {
       if (temp[name.toLowerCase()] === undefined) {
         temp[name.toLowerCase()] = 0;
       }
-      if (temp[name.toLowerCase()] == 1) {
-
-      } else {
+      if (temp[name.toLowerCase()] === 1) {
+        for(let i = 0; i < listNames.length; i++){
+          if(name.toLowerCase() === listNames[i].key){
+            listNames[i].count++;
+          }
+        }  
+      } 
+      else {
         temp[name.toLowerCase()] += 1;
+        listNames.push({key : name.toLowerCase(), count : temp[name.toLowerCase()]});
         counter += 1;
       }
     }
   };
+  //validate format
+  var nameValidate = function(name){
+    var regex = /^[a-z]*[a-z]$/i;
+    return regex.test(name);
+  };
+
   var theGreetings = function (languageSelected, name) {
-    if (Number.isNaN(Number(name)) && languageSelected != '') {
+    if (nameValidate(name) && languageSelected != '') {
       nameEntry(name);
       if (languageSelected === 'english') {
-        return 'Hello ' + name;
+        message =  'Hello ' + name;
       }
       if (languageSelected === 'isixhosa') {
-        return 'Molo ' + name;
+        message =  'Molo ' + name;
       }
       if (languageSelected === 'afrikaans') {
-        return 'Hallo ' + name;
+        message =  'Hallo ' + name;
       }
-    } else if (Number.isNaN(Number(name)) && languageSelected === '' ){
-      return  'please select a language '+ name ;
+    } else if (nameValidate(name) && languageSelected === '' ){
+      message =   'please select a language '+ name ;
     } else if (name === "" && languageSelected != '') {
       if (languageSelected === 'english') {
-        return "Please enter your name on the text box, select the language of your choice then press the \'Greet Me\'";
+        message =  "Please enter your name on the text box, select the language of your choice then press the \'Greet Me\'";
       }
       if (languageSelected === 'isixhosa') {
-        return 'Nceda faka igama lakho kwibhokisi yombhalo, ukhethe ulwimi, uze ucinezele iqhosha lokubulisa. ';
+        message =  'Nceda faka igama lakho kwibhokisi yombhalo, ukhethe ulwimi, uze ucinezele iqhosha lokubulisa. ';
       }
       if (languageSelected === 'afrikaans') {
-        return 'Voer asseblief jou naam in die tekskassie in, kies die taal van jou keuse en druk die knoppie Gree my.';
+        message =  'Voer asseblief jou naam in die tekskassie in, kies die taal van jou keuse en druk die knoppie Gree my.';
       }
     } else{
-      return 'Please enter your name and select a language ';
+      message =  'Please enter your name and select a language ';
     }
   };
   var getCounter = function () {
     return counter;
+  };
+  var getMessage = function(){
+    return message;
   };
   var sumObj = function (temp) {
     var sum = 0;
@@ -58,7 +75,15 @@ module.exports = function greet() {
     nameEntry,
     getCounter,
     theGreetings,
+    getMessage,
     mySum: sumObj,
-    objtemp: temp
+    temp,
+    listNames,
+    result : function(){
+      return{
+         message, 
+         number : getCounter() 
+      };
+    }
   };
 };
