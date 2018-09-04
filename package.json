@@ -7,7 +7,7 @@
     "test": "mocha",
     "start": "node index.js"
   },
-  "author": "",
+  "author": "busisile",
   "license": "ISC",
   "devDependencies": {
     "body-parser": "^1.18.3",
@@ -21,6 +21,8 @@
     "express-handlebars": "^3.0.0"
   },
   "dependencies": {
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "nyc": "^13.0.1",
+    "pg": "^7.4.3"
   }
 }
