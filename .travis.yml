@@ -1,7 +1,7 @@
 language: node_js
 
 env:
-     - DB=postgresql://postgres@localhost:5432/user
+     - DB=postgresql://postgres@localhost/user
 node_js:
         - "v8.10.0"
 
