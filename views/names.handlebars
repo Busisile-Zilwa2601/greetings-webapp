@@ -1,6 +1,10 @@
-<h1>Greeted Name</h1>
+<div class='outingBorder naving'>
+    <a href ='home_page'><i class="fas fa-arrow-left"></i> previous</a>
+    <br />
+    <h1>Greeted Name</h1>
+</div>
 <div class='row'>
-    <a href ='home_page'>previous</a>
+    
     <p>The following are the names of greeted people</p>
     <table>
         <tr>
@@ -8,7 +12,7 @@
         </tr>
         {{#each names}}
         <tr>
-            <td><a href='/counter/{{name}}'>{{name}}</a></td>
+            <td><a href='/counter/{{name}}'><span style="text-transform:capitalize;">{{name}}</span></a></td>
         </tr>
         {{/each}}
     </table>
