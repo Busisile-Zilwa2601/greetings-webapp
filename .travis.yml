@@ -1,3 +1,14 @@
 language: node_js
+env: 
+   - DB=postgres://postgres@localhost:5432/user
 node_js:
   - "v8.10.0"
+
+before_script:
+ - psql -c 'create database user;' -U postgres
+ - psql -U postgres -d user -a -f greetings.sql
+
+addons:
+   apt:
+   packages:
+   - postgres-server-dev-9.2   
