@@ -136,6 +136,9 @@ module.exports = function greet(pool) {
     all,
     add,
     get,
+    update,
+    checkTable,
+    countAll,
     deleteAll,
     result : async function(){
       return{

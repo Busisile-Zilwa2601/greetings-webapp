@@ -42,9 +42,17 @@ app.use(bodyParser.json());
 app.get('/', myRoutes.index);
 app.get('/greetings', myRoutes.getGreetings);//this is the greeting part
 app.post('/greeted', myRoutes.getNames);//returns the list of names from the database
-app.post('/deleted', myRoutes.deleteAll);
-app.get('/counter/:name', myRoutes.getCounts);// shows how many times a name has been greeted.
-
+app.post('/deleted', myRoutes.deleteAll);//delete the database
+app.get('/counter/:name', myRoutes.getCounts);
+// shows how many times a name has been greeted.
+app.get('/greeted', myRoutes.getNames);
+app.get('/home_page', async function(req, res){
+	try{
+		res.redirect('/');
+	}catch(err){
+		console.error('Does not go back to home', err);
+	}
+});
 //add the PORT
 let PORT = process.env.PORT || 3077;
 

@@ -3,7 +3,7 @@ module.exports = function myRoutes(greet) {
     async function index(req, res) {
         try{
             let results = await greet.result();
-            res.render('home',{message : results.message, number: results.number});
+            res.render('home',{/*message : results.message,*/ number: results.number});
         }catch(err){
             console.error('Did not connect to database', err);
         }

@@ -1,0 +1,9 @@
+body{
+    margin-top: 10px;
+    background: #f9f9f9;
+}
+.outingBorder{
+    padding: 10px;
+    width: 250px;
+    border: 3px outset inherit;
+}
