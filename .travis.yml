@@ -1,14 +1,15 @@
 language: node_js
 
 env:
-     - DB=postgresql://postgres@localhost/user
+     - DATABASE_URL=postgresql://postgres@localhost/user_counts
+
 node_js:
         - "v8.10.0"
 
 before_script:
 
-  - psql -c 'create database  user;' -U postgres
-  - psql -U postgres -d user -a -f greetings.sql
+  - psql -c 'create database user_counts;' -U postgres
+  - psql -U postgres -d user_counts -a -f greetings.sql
 
 addons:
     apt:
