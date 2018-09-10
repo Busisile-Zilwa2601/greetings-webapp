@@ -206,3 +206,8 @@ table {
   background-color: #efefef;}
   td:hover {
   background-color: #D0D3D4;}
+
+  table.row-clickable tbody tr td a{
+    display: block;
+    text-decoration-line: none;
+  }

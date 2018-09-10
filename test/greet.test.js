@@ -1,5 +1,6 @@
 const assert = require('assert');
-const Greet = require('../greet');
+const Greet = require('../greet.db');
+const GreetFunction = require('../greet');
 const pg = require("pg");
 const Pool = pg.Pool;
 
@@ -59,56 +60,59 @@ describe('The Greetings database webApp', function () {
     });
     it("It should return the \'Hello Busisile\' and \' Hello Nolupho\'", async function () {
             let greet = Greet(pool);
+            let greetFun = GreetFunction(greet); 
+            await greetFun.theGreetings('english', 'Busisile');
+            assert.equal(await greetFun.getMessage(), "Hello busisile");
             
-            await greet.theGreetings('english', 'Busisile');
-            assert.equal(await greet.getMessage(), "Hello busisile");
+            await greetFun.theGreetings('english', 'Nolupho');
+            assert.equal(await greetFun.getMessage(), "Hello nolupho");
             
-            await greet.theGreetings('english', 'Nolupho');
-            assert.equal(await greet.getMessage(), "Hello nolupho");
+            await greetFun.theGreetings('english', 'nolupho');
+            assert.equal(await greetFun.getMessage(), "Hello nolupho");
             
-            await greet.theGreetings('english', 'nolupho');
-            assert.equal(await greet.getMessage(), "Hello nolupho");
-            
-            await greet.theGreetings('isixhosa', 'busisile');
-            assert.equal(await greet.getMessage(), "Molo busisile");
-            assert.equal(await greet.getCounter(), 2);
+            await greetFun.theGreetings('isixhosa', 'busisile');
+            assert.equal(await greetFun.getMessage(), "Molo busisile");
+            assert.equal(await greetFun.getCounter(), 2);
     });
     it("It should return the \'Busisile greeted 2\' and \'Nolupho greeted 2\'", async function () {
         let greet = Greet(pool);
-        
-        await greet.theGreetings('english', 'Busisile');
-        await greet.theGreetings('english', 'Nolupho');
-        await greet.theGreetings('english', 'nolupho');
-        await greet.theGreetings('isixhosa', 'busisile');
+        let greetFun = GreetFunction(greet); 
+        await greetFun.theGreetings('english', 'Busisile');
+        await greetFun.theGreetings('english', 'Nolupho');
+        await greetFun.theGreetings('english', 'nolupho');
+        await greetFun.theGreetings('isixhosa', 'busisile');
     
-        let nameb = await greet.get('busisile');
+        let nameb = await greetFun.get('busisile');
         assert.equal(nameb.name, 'busisile');
         assert.equal(nameb.counter, 2);
-        let nameN = await greet.get('nolupho');
+        let nameN = await greetFun.get('nolupho');
         assert.equal(nameN.name, 'nolupho');
         assert.equal(nameN.counter, 2);
     });
     it("If no name is entered, but a language is selected, after pressing \'Greet Me\' ,It should return a message on the language you selected. ", async function () {
             var greet = Greet(pool);
-            await greet.theGreetings('afrikaans', '');
-            assert.equal(await greet.getMessage(), "Voer asseblief jou naam in die tekskassie in, kies die taal van jou keuse en druk die knoppie Gree my.");
-            await greet.theGreetings('english', '');
-            assert.equal(await greet.getMessage(), "Please enter your name on the text box, select the language of your choice then press the \'Greet Me\'");
-            await greet.theGreetings('isixhosa', '');
-            assert.equal(await greet.getMessage(), "Nceda faka igama lakho kwibhokisi yombhalo, ukhethe ulwimi, uze ucinezele iqhosha lokubulisa. ");
-            assert.equal(await greet.countAll(), 0);
+            let greetFun = GreetFunction(greet);
+            await greetFun.theGreetings('afrikaans', '');
+            assert.equal(await greetFun.getMessage(), "Voer asseblief jou naam in die tekskassie in, kies die taal van jou keuse en druk die knoppie Gree my.");
+            await greetFun.theGreetings('english', '');
+            assert.equal(await greetFun.getMessage(), "Please enter your name on the text box, select the language of your choice then press the \'Greet Me\'");
+            await greetFun.theGreetings('isixhosa', '');
+            assert.equal(await greetFun.getMessage(), "Nceda faka igama lakho kwibhokisi yombhalo, ukhethe ulwimi, uze ucinezele iqhosha lokubulisa. ");
+            assert.equal(await greetFun.getCounter(), 0);
     });
     it("If a \'Busisile\' is entered, but a language is not selected, after pressing \'Greet Me\' ,It should return \'Busisile\' please select a language. The count will remain zero", async function () {
         var greet = Greet(pool);
-        await greet.theGreetings('', 'Busisile');
-        assert.equal(await greet.getMessage(), "please select a language Busisile");
-        assert.equal(await greet.countAll(), 0);
+    let greetFun = GreetFunction(greet);
+        await greetFun.theGreetings('', 'Busisile');
+        assert.equal(await greetFun.getMessage(), "please select a language Busisile");
+        assert.equal(await greetFun.getCounter(), 0);
     });
     it("If no name is entered, a language is not selected, after pressing \'Greet Me\' ,It should return \'Please enter your name and select a language.\' ", async function () {
         var greet = Greet(pool);
-        await greet.theGreetings('', '');
-        assert.equal(await greet.getMessage(), 'Please enter your name and select a language ');
-        assert.equal(await greet.countAll(), 0);
+        let greetFun = GreetFunction(greet);
+        await greetFun.theGreetings('', '');
+        assert.equal(await greetFun.getMessage(), 'Please enter your name and select a language ');
+        assert.equal(await greetFun.getCounter(), 0);
     });
     after(function(){
         pool.end();

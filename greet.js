@@ -1,4 +1,4 @@
-module.exports = function greet(pool) {
+module.exports = function greet(greetDB) {
   var temp = {};
   //var counter = 0;
   var message ='';
@@ -9,18 +9,18 @@ module.exports = function greet(pool) {
       if (temp[name.toLowerCase()] === undefined) {
         temp[name.toLowerCase()] = 0;
       }
-      if (temp[name.toLowerCase()] === 1 || await checkTable(name.toLowerCase())) {
+      if (temp[name.toLowerCase()] === 1 || await greetDB.checkTable(name.toLowerCase())) {
         for(let i = 0; i < listNames.length; i++){
           if(name.toLowerCase() === listNames[i].key){
             listNames[i].count++;
           }
         }
-        await update(name.toLowerCase());  
+        await greetDB.update(name.toLowerCase());  
       } 
       else {
         temp[name.toLowerCase()] += 1;
         listNames.push({key : name.toLowerCase(), count : temp[name.toLowerCase()]});
-        await add(name.toLowerCase(), temp[name.toLowerCase()]);
+        await greetDB.add(name.toLowerCase(), temp[name.toLowerCase()]);
         //counter += 1;
       }
     }
@@ -34,7 +34,7 @@ module.exports = function greet(pool) {
   var theGreetings = async function (languageSelected, name) {
     if (nameValidate(name) && languageSelected != '') {
       await nameEntry(name);
-      let name1 = await get(name.toLowerCase());
+      let name1 = await greetDB.get(name.toLowerCase());
       if (languageSelected === 'english') {
           message =  'Hello ' + name1.name;
       }
@@ -62,7 +62,7 @@ module.exports = function greet(pool) {
   };
   //return a count
   var getCounter = async function () {
-    let counter = await countAll();
+    let counter = await greetDB.countAll();
     return counter;
   };
   //return the message
@@ -79,50 +79,15 @@ module.exports = function greet(pool) {
     }
     return sum;
   };
-  /*The following functions are for the database
-  * Return all the names on the database
-  * Return just a single name
-  * Return updated name
-  * Delete all the names in the database
-  */
-  async function all(){
-    let names = await pool.query('SELECT * from greetings');
-    return names.rows;
+  
+  async function deleteAll(){
+    return await greetDB.deleteAll();
   }
-  async function add(name, counter){
-    let data = [
-        name, counter
-    ];
-    let results = await pool.query('insert into greetings (name, counter) values ($1 , $2)', data);
-    return results;
+  async function all(){
+    return await greetDB.all();
   }
   async function get(name){
-    let results = await pool.query('SELECT * FROM greetings WHERE name = $1', [name]);
-    if (results.rows.length > 0) {  
-      return results.rows[0];
-    }
-    return null;
-  }
-  async function update(name){
-    let results = await pool.query('select counter from greetings where name = $1', [name]);
-    let person = results.rows[0];
-    let myCounter = person.counter;
-    myCounter++;
-    return pool.query('UPDATE greetings SET counter = $1 WHERE name = $2', [myCounter, name]);
-  }
-  async function checkTable(name){
-    let results = await pool.query('SELECT name FROM greetings WHERE name = $1', [name]);
-    if(results.rows.length > 0){
-      return true;
-    }else{ return false;}  
-  }
-  async function countAll(){
-    let names = await pool.query('SELECT count(*) FROM greetings');
-    return names.rows[0].count;
-  }
-  async function deleteAll (){
-    temp = {};
-    return await pool.query('DELETE FROM greetings');
+    return await greetDB.get(name);
   }
   //return all the functions
   return {
@@ -132,18 +97,15 @@ module.exports = function greet(pool) {
     getMessage,
     mySum: sumObj,
     temp,
+    getCounter,
     listNames,
-    all,
-    add,
-    get,
-    update,
-    checkTable,
-    countAll,
     deleteAll,
+    all,
+    get,
     result : async function(){
       return{
          message : await getMessage(), 
-         number : await countAll() 
+         number : await getCounter() 
       };
     }
   };

@@ -5,14 +5,15 @@
 </div>
 <div class='row'>
     
-    <p>The following are the names of greeted people</p>
-    <table>
+    <p style="margin-left: 20%;">The following are the names of greeted people</p>
+    <table class = 'row-clickable'>
         <tr>
             <th>Names</th>
         </tr>
         {{#each names}}
-        <tr>
+        <tr>    
             <td><a href='/counter/{{name}}'><span style="text-transform:capitalize;">{{name}}</span></a></td>
+        
         </tr>
         {{/each}}
     </table>

@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const myGreet = require('./greet');
+const myDBfunctions = require('./greet.db');
 const routes = require('./myRoutes');
 const pg = require("pg");
 const Pool = pg.Pool;
@@ -24,7 +25,8 @@ const pool = new Pool({
 });
 
 //instances
-let greet = myGreet(pool);
+let greetDB = myDBfunctions(pool);
+let greet = myGreet(greetDB);
 let myRoutes = routes(greet);
 
 //default settings
